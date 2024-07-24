@@ -58,22 +58,22 @@ class ClockTest < Minitest::Test
   end
 
   def test_negative_hour
-    skip
+    # skip
     assert_equal "23:15", Clock.new(hour: -1, minute: 15).to_s
   end
 
   def test_negative_hour_rolls_over
-    skip
+    # skip
     assert_equal "23:00", Clock.new(hour: -25).to_s
   end
 
   def test_negative_hour_rolls_over_continuously
-    skip
+    # skip
     assert_equal "05:00", Clock.new(hour: -91).to_s
   end
 
   def test_negative_minutes
-    skip
+    # skip
     assert_equal "00:20", Clock.new(hour: 1, minute: -40).to_s
   end
 
