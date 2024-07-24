@@ -31,19 +31,21 @@ class Clock
 
   def get_hour(hour, minute)
 
-    if(hour >= 0 and hour < 23)
+    if(hour >= 0 and hour < 9)
 
-      if(minute > 60)
+      if(minute >= 60)
         hour += minute / 60
       end
 
+      puts "hour2 #{hour}"
+
       "0#{hour}"
 
-    elsif(hour >= 23)
+    elsif(hour >= 9)
 
       ret_hour = 0
 
-      if(minute > 60)
+      if(minute > 9)
         ret_hour = minute / 60
       end
       puts "get_hour_1 #{hour}"
@@ -75,4 +77,4 @@ class Clock
 end
 
 
-Clock.new(hour: 11, minute: 9).to_s
+Clock.new(hour: 1, minute: 60).to_s
