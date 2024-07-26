@@ -42,6 +42,8 @@ class Clock
 
     elsif(hour >= 9 and minute >= 0)
 
+      puts "hour >= 9 and minute >= 0"
+
       ret_hour = 0
 
       ret_hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
@@ -52,9 +54,19 @@ class Clock
 
       ret_hour < 10 ? "0#{ret_hour}" : ret_hour
 
-    elsif(((0...10) === hour) and (minute > -60))
+    elsif(((0...10) === hour) and (minute > -60)) #Positive low hour and low negative minutes
+      puts "((0...10) === hour) and (minute > -60)"
 
-    hour == 0 ? "23" : "0#{hour - 1}"
+      hour == 0 ? "23" : "0#{hour - 1}"
+
+    elsif(((0...10) === hour) and (minute <= -60)) #Positive low hour and hight negative minutes
+      puts "((0...10) === hour) and (minute <= -60)"
+
+      ret_hour = hour == 0 ? 24 : 24 + hour
+      ret_hour += minute / 60
+
+
+      ret_hour < 10 ? "0#{ret_hour}" : "#{ret_hour}"
 
     elsif((hour < 0) and (minute >= 0))
       puts "(hour < 0) and (minute >= 0)"
@@ -66,6 +78,23 @@ class Clock
       ret_hour += hour.abs < 24 ? (24 + hour) : 24 - (hour.abs % 24)
 
       # puts hour.abs % 24
+
+      ret_hour < 10 ? "0#{ret_hour}" : ret_hour
+
+    elsif((hour < 0) and (minute < 0))
+      puts "(hour < 0) and (minute < 0)"
+
+
+
+      ret_hour = 0
+
+      ret_hour = (hour.abs < 24) ? (24 + hour) : (24 - (hour.abs % 24))
+      ret_hour += minute.abs % 60 == 0 ? 0 : -1 # if there are minutes left, then we have to remove 1 hour.
+      hour_within_minutes = minute.abs / 60
+      hour_within_minutes = hour_within_minutes < 24 ? hour_within_minutes : (hour_within_minutes % 24)
+      puts ">>> #{ret_hour}"
+      puts ">>> #{hour_within_minutes}"
+      ret_hour = ret_hour - hour_within_minutes
 
       ret_hour < 10 ? "0#{ret_hour}" : ret_hour
     end
@@ -84,6 +113,10 @@ class Clock
       puts "get_minute minute >= -60"
       ret_min = 60 + minute
       ret_min < 10 ? "0#{ret_min}" : ret_min
+    elsif(minute < -60)
+      puts "get_minute minute < -60"
+      ret_min = minute.abs % 60
+      (60 - ret_min) < 10 ? "0#{60 - ret_min}" : 60 - ret_min
     end
   end
 
@@ -106,4 +139,4 @@ class Clock
 end
 
 
-puts Clock.new(hour: -1, minute: 15).to_s
+puts Clock.new(hour: 2, minute: -60).to_s
