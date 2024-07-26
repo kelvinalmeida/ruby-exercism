@@ -10,6 +10,24 @@ class Clock
   def initialize(hour: 0, minute: 0)
     @hour = hour
     @minute = minute
+    @time = 0
+  end
+
+
+  def +(obj)
+    @time = to_s
+    my_time_in_minutes = to_minutes(@time)
+    obj_time_in_minutes = to_minutes(obj.to_s)
+
+    puts my_time_in_minutes
+    puts obj_time_in_minutes
+  end
+
+  def to_minutes(time)
+    hour = time[0..1].to_i
+    minutes = time[3..4].to_i
+    puts hour
+    puts minute
   end
 
   def to_s
@@ -20,14 +38,17 @@ class Clock
       "0#{@hour}:0#{@minute}"
 
     else
+      if(@time == 0)
+        puts "else"
+        hour = get_hour(@hour, @minute)
+        puts "hour #{hour}"
+        minute = get_minute(@minute)
+        puts "minute #{minute}"
 
-      puts "else"
-      hour = get_hour(@hour, @minute)
-      puts "hour #{hour}"
-      minute = get_minute(@minute)
-      puts "minute #{minute}"
-      return "#{hour}:#{minute}"
-
+        @time = "#{hour}:#{minute}"
+      else
+        @time
+      end
     end
   end
 
@@ -140,4 +161,5 @@ class Clock
 end
 
 
-puts Clock.new(hour: 1, minute: -4820).to_s
+# clock = Clock.new(hour: 6, minute: 41)
+# puts (clock + Clock.new(minute: 0)).to_s
