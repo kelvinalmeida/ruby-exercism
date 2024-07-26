@@ -63,8 +63,9 @@ class Clock
       puts "((0...10) === hour) and (minute <= -60)"
 
       ret_hour = hour == 0 ? 24 : 24 + hour
-      ret_hour += minute / 60
-
+      ret_hour -= (minute / 60).abs < 24 ? (minute / 60).abs : ((minute / 60).abs % 24)
+      puts ret_hour
+      ret_hour = ret_hour < 24 ? ret_hour : (ret_hour % 24)
 
       ret_hour < 10 ? "0#{ret_hour}" : "#{ret_hour}"
 
@@ -139,4 +140,4 @@ class Clock
 end
 
 
-puts Clock.new(hour: 2, minute: -60).to_s
+puts Clock.new(hour: 1, minute: -4820).to_s
