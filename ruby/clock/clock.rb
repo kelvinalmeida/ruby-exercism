@@ -25,7 +25,7 @@ class Clock
 
   def to_minutes(time)
     hour = time[0..1].to_i
-    minutes = time[3..4].to_i
+    minute = time[3..4].to_i
     puts hour
     puts minute
   end
@@ -35,20 +35,15 @@ class Clock
     if((0...10) === @hour and (0...10) === @minute)
 
       puts "@hour < 10 and @minute < 10"
-      "0#{@hour}:0#{@minute}"
+      @time = "0#{@hour}:0#{@minute}"
 
     else
-      if(@time == 0)
-        puts "else"
-        hour = get_hour(@hour, @minute)
-        puts "hour #{hour}"
-        minute = get_minute(@minute)
-        puts "minute #{minute}"
-
-        @time = "#{hour}:#{minute}"
-      else
-        @time
-      end
+      puts "else"
+      hour = get_hour(@hour, @minute)
+      puts "hour #{hour}"
+      minute = get_minute(@minute)
+      puts "minute #{minute}"
+      @time = "#{hour}:#{minute}"
     end
   end
 
@@ -161,5 +156,12 @@ class Clock
 end
 
 
-# clock = Clock.new(hour: 6, minute: 41)
-# puts (clock + Clock.new(minute: 0)).to_s
+clock = Clock.new(hour: 10, minute: 0)
+puts  
+
+
+
+
+
+
+clock + Clock.new(minute: 3).to_s
