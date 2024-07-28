@@ -16,18 +16,35 @@ class Clock
 
   def +(obj)
     @time = to_s
-    my_time_in_minutes = to_minutes(@time)
-    obj_time_in_minutes = to_minutes(obj.to_s)
+    obj_time = obj.to_s
 
-    puts my_time_in_minutes
-    puts obj_time_in_minutes
+    @time = join_hour(@time, obj_time)
+    @minute = join_minutes(@time, obj_time)
+
+    # puts my_time_in_minutes
+    # puts obj_time_in_minutes
   end
 
-  def to_minutes(time)
+  def join_hour(time, obj_time)
     hour = time[0..1].to_i
+    obj_hour = obj_time[0..1].to_i
+
+    puts "#{time}, #{obj_time}"
+    puts ">>>>>> hour  #{hour}"
+    puts ">>>>>> obj_hour  #{obj_hour}"
+
+    hour + obj_hour
+  end
+
+  def join_minutes(time, obj_time)
     minute = time[3..4].to_i
-    puts hour
-    puts minute
+    obj_minute = obj_time[3..4].to_i
+
+    puts "#{time}, #{obj_time}"
+    puts ">>>>>> minute  #{minute}"
+    puts ">>>>>> obj_minute  #{obj_minute}"
+
+    minute + obj_minute
   end
 
   def to_s
@@ -43,7 +60,13 @@ class Clock
       puts "hour #{hour}"
       minute = get_minute(@minute)
       puts "minute #{minute}"
-      @time = "#{hour}:#{minute}"
+
+      @hour = hour
+      @minute = minute
+
+      puts ">>>> to_s #{@hour}:#{@minute}"
+
+      @time = "#{@hour}:#{@minute}"
     end
   end
 
@@ -155,13 +178,5 @@ class Clock
   end
 end
 
-
 clock = Clock.new(hour: 10, minute: 0)
-puts  
-
-
-
-
-
-
-clock + Clock.new(minute: 3).to_s
+(clock + Clock.new(minute: 3)).to_s
