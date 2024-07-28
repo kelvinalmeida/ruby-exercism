@@ -15,23 +15,25 @@ class Clock
 
 
   def +(obj)
-    @time = to_s
+    time = to_s
     obj_time = obj.to_s
 
-    @time = join_hour(@time, obj_time)
-    @minute = join_minutes(@time, obj_time)
+    puts ">>>>>> time  #{time}"
+    puts ">>>>>> @obj_time  #{obj_time}"
 
-    # puts my_time_in_minutes
-    # puts obj_time_in_minutes
+    puts "&&&&&#{time}, #{obj_time}"
+    hour = join_hour(time, obj_time)
+    puts "&&&&&#{time}, #{obj_time}"
+    minute = join_minutes(time, obj_time)
+
+    Clock.new(hour: hour, minute: minute)
   end
 
   def join_hour(time, obj_time)
     hour = time[0..1].to_i
     obj_hour = obj_time[0..1].to_i
 
-    puts "#{time}, #{obj_time}"
-    puts ">>>>>> hour  #{hour}"
-    puts ">>>>>> obj_hour  #{obj_hour}"
+
 
     hour + obj_hour
   end
@@ -49,9 +51,14 @@ class Clock
 
   def to_s
 
+    puts "first hour/minute #{@hour} #{@minute}"
+
     if((0...10) === @hour and (0...10) === @minute)
 
-      puts "@hour < 10 and @minute < 10"
+      puts "(0...10) === @hour and (0...10) === @minute"
+      puts "hour #{@hour}"
+      puts "minute #{@minute}"
+
       @time = "0#{@hour}:0#{@minute}"
 
     else
@@ -61,12 +68,12 @@ class Clock
       minute = get_minute(@minute)
       puts "minute #{minute}"
 
-      @hour = hour
-      @minute = minute
+      # @hour = hour
+      # @minute = minute
 
-      puts ">>>> to_s #{@hour}:#{@minute}"
+      puts ">>>> to_s #{hour}:#{minute}"
 
-      @time = "#{@hour}:#{@minute}"
+      "#{hour}:#{minute}"
     end
   end
 
@@ -75,21 +82,33 @@ class Clock
 
     if(((0...9) === hour) and (minute >= 0))
       puts "get hour >>> (hour  === (0...9)) and (minute >= 0)"
-      hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
+      puts "hour #{hour}"
+      puts "minute #{minute}"
 
-      "0#{hour}"
+      hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
+      hour = hour < 24 ? hour : (hour % 24)
+
+      puts ">> #{hour}"
+      hour < 10 ? "0#{hour}" : "#{hour}"
 
     elsif(hour >= 9 and minute >= 0)
 
       puts "hour >= 9 and minute >= 0"
+      puts "hour #{hour}"
+      puts "minute #{minute}"
 
       ret_hour = 0
 
       ret_hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
 
+      puts "ret_hour1 #{ret_hour}"
+
+
       ret_hour += hour < 24 ? hour : (hour % 24)
 
-      puts "ret_hour #{ret_hour}"
+      ret_hour = ret_hour == 24 ? 0 : ret_hour
+
+      puts "ret_hour2 #{ret_hour}"
 
       ret_hour < 10 ? "0#{ret_hour}" : ret_hour
 
@@ -123,8 +142,8 @@ class Clock
 
     elsif((hour < 0) and (minute < 0))
       puts "(hour < 0) and (minute < 0)"
-
-
+      puts "hour #{hour}"
+      puts "minute #{minute}"
 
       ret_hour = 0
 
@@ -178,5 +197,5 @@ class Clock
   end
 end
 
-clock = Clock.new(hour: 10, minute: 0)
-(clock + Clock.new(minute: 3)).to_s
+clock = Clock.new(hour: 1, minute: 1)
+(clock + Clock.new(minute: 3500)).to_s
