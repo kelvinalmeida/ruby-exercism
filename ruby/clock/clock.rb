@@ -10,192 +10,30 @@ class Clock
   def initialize(hour: 0, minute: 0)
     @hour = hour
     @minute = minute
-    @time = 0
+    normalize_time
   end
 
-
-  def +(obj)
-    time = to_s
-    obj_time = obj.to_s
-
-    puts ">>>>>> time  #{time}"
-    puts ">>>>>> @obj_time  #{obj_time}"
-
-    puts "&&&&&#{time}, #{obj_time}"
-    hour = join_hour(time, obj_time)
-    puts "&&&&&#{time}, #{obj_time}"
-    minute = join_minutes(time, obj_time)
-
-    Clock.new(hour: hour, minute: minute)
+  def +(other)
+    Clock.new(hour: @hour + other.get_hours, minute: @minute + other.get_minutes)
   end
 
-  def join_hour(time, obj_time)
-    hour = time[0..1].to_i
-    obj_hour = obj_time[0..1].to_i
-
-
-
-    hour + obj_hour
+  def get_minutes
+    @minute
   end
 
-  def join_minutes(time, obj_time)
-    minute = time[3..4].to_i
-    obj_minute = obj_time[3..4].to_i
-
-    puts "#{time}, #{obj_time}"
-    puts ">>>>>> minute  #{minute}"
-    puts ">>>>>> obj_minute  #{obj_minute}"
-
-    minute + obj_minute
+  def get_hours
+    @hour
   end
 
   def to_s
-
-    puts "first hour/minute #{@hour} #{@minute}"
-
-    if((0...10) === @hour and (0...10) === @minute)
-
-      puts "(0...10) === @hour and (0...10) === @minute"
-      puts "hour #{@hour}"
-      puts "minute #{@minute}"
-
-      @time = "0#{@hour}:0#{@minute}"
-
-    else
-      puts "else"
-      hour = get_hour(@hour, @minute)
-      puts "hour #{hour}"
-      minute = get_minute(@minute)
-      puts "minute #{minute}"
-
-      # @hour = hour
-      # @minute = minute
-
-      puts ">>>> to_s #{hour}:#{minute}"
-
-      "#{hour}:#{minute}"
-    end
+    "%02d:%02d" % [@hour, @minute]
   end
 
-  def get_hour(hour, minute)
-
-
-    if(((0...9) === hour) and (minute >= 0))
-      puts "get hour >>> (hour  === (0...9)) and (minute >= 0)"
-      puts "hour #{hour}"
-      puts "minute #{minute}"
-
-      hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
-      hour = hour < 24 ? hour : (hour % 24)
-
-      puts ">> #{hour}"
-      hour < 10 ? "0#{hour}" : "#{hour}"
-
-    elsif(hour >= 9 and minute >= 0)
-
-      puts "hour >= 9 and minute >= 0"
-      puts "hour #{hour}"
-      puts "minute #{minute}"
-
-      ret_hour = 0
-
-      ret_hour += minute < 60 ? 0 : get_the_hour_by_minutes(minute)
-
-      puts "ret_hour1 #{ret_hour}"
-
-
-      ret_hour += hour < 24 ? hour : (hour % 24)
-
-      ret_hour = ret_hour == 24 ? 0 : ret_hour
-
-      puts "ret_hour2 #{ret_hour}"
-
-      ret_hour < 10 ? "0#{ret_hour}" : ret_hour
-
-    elsif(((0...10) === hour) and (minute > -60)) #Positive low hour and low negative minutes
-      puts "((0...10) === hour) and (minute > -60)"
-
-      hour == 0 ? "23" : "0#{hour - 1}"
-
-    elsif(((0...10) === hour) and (minute <= -60)) #Positive low hour and hight negative minutes
-      puts "((0...10) === hour) and (minute <= -60)"
-
-      ret_hour = hour == 0 ? 24 : 24 + hour
-      ret_hour -= (minute / 60).abs < 24 ? (minute / 60).abs : ((minute / 60).abs % 24)
-      puts ret_hour
-      ret_hour = ret_hour < 24 ? ret_hour : (ret_hour % 24)
-
-      ret_hour < 10 ? "0#{ret_hour}" : "#{ret_hour}"
-
-    elsif((hour < 0) and (minute >= 0))
-      puts "(hour < 0) and (minute >= 0)"
-
-      ret_hour = 0
-
-      ret_hour += minute > 60 ? 0 : get_the_hour_by_minutes(minute)
-
-      ret_hour += hour.abs < 24 ? (24 + hour) : 24 - (hour.abs % 24)
-
-      # puts hour.abs % 24
-
-      ret_hour < 10 ? "0#{ret_hour}" : ret_hour
-
-    elsif((hour < 0) and (minute < 0))
-      puts "(hour < 0) and (minute < 0)"
-      puts "hour #{hour}"
-      puts "minute #{minute}"
-
-      ret_hour = 0
-
-      ret_hour = (hour.abs < 24) ? (24 + hour) : (24 - (hour.abs % 24))
-      ret_hour += minute.abs % 60 == 0 ? 0 : -1 # if there are minutes left, then we have to remove 1 hour.
-      hour_within_minutes = minute.abs / 60
-      hour_within_minutes = hour_within_minutes < 24 ? hour_within_minutes : (hour_within_minutes % 24)
-      puts ">>> #{ret_hour}"
-      puts ">>> #{hour_within_minutes}"
-      ret_hour = ret_hour - hour_within_minutes
-
-      ret_hour < 10 ? "0#{ret_hour}" : ret_hour
-    end
-  end
-
-  def get_minute(minute)
-    if((0...10) === minute)
-      puts "get_minute (0...10) === minute"
-      "0#{minute}"
-    elsif(minute >= 10)
-      puts "get_minute minute >= 10"
-      minute_ret= 0
-      minute_ret = minute < 60 ? minute : (minute % 60)
-      (0...10) === minute_ret ? "0#{minute_ret}" : "#{minute_ret}"
-    elsif(minute >= -60)
-      puts "get_minute minute >= -60"
-      ret_min = 60 + minute
-      ret_min < 10 ? "0#{ret_min}" : ret_min
-    elsif(minute < -60)
-      puts "get_minute minute < -60"
-      ret_min = minute.abs % 60
-      (60 - ret_min) < 10 ? "0#{60 - ret_min}" : 60 - ret_min
-    end
-  end
-
-
-  def get_the_hour_by_minutes(minutes)
-
-    hour = 0
-
-    if(minutes >= 60)
-      hour += minutes / 60
-    end
-
-    if(hour > 23)
-      hour = hour % 24
-    end
-
-    hour
-
+  def normalize_time
+    @hour =  (@hour + (@minute / 60)) % 24
+    @minute = @minute % 60
   end
 end
 
-clock = Clock.new(hour: 1, minute: 1)
-(clock + Clock.new(minute: 3500)).to_s
+clock = Clock.new(hour: 10, minute: 3)
+(clock + Clock.new(minute: 70)).to_s
